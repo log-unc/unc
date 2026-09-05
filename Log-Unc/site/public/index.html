@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Log-Unc measures how accurately a Roblox environment logger reproduces the real engine.">
+
+  <title>Log-Unc</title>
+
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <button class="nav-button active" data-tab="home" type="button">
+        Home
+      </button>
+
+      <button class="nav-button" data-tab="leaderboard" type="button">
+        Leaderboard
+      </button>
+
+      <button class="nav-button" data-tab="script" type="button">
+        Script
+      </button>
+
+      <button class="nav-button" data-tab="submit" type="button">
+        Submit
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel active" id="home">
+      <div class="home">
+        <div>
+          <h1>
+            Test your environment
+            <span>logger.</span>
+          </h1>
+
+          <p class="home-description">
+            Log-Unc runs
+            <b data-reference-checks>1200</b>
+            checks against the Roblox API and reports how much of it your
+            sandbox reproduces correctly. A real Roblox client scores 100% with
+            zero failures, so every failed check is a gap in your logger.
+          </p>
+
+          <div class="home-actions">
+            <button class="primary-button" data-open-tab="script" type="button">
+              Get script
+            </button>
+
+            <button class="secondary-button" data-open-tab="leaderboard" type="button">
+              Leaderboard
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-steps">
+        <div class="step">
+          <b>01 &mdash; Copy</b>
+          <p>
+            Grab the script from the Script tab. One file, no dependencies,
+            and a single optional HTTP probe.
+          </p>
+        </div>
+
+        <div class="step">
+          <b>02 &mdash; Run</b>
+          <p>
+            Execute it in your environment logger. The final lines print the
+            score, every failed check and the collected metrics.
+          </p>
+        </div>
+
+        <div class="step">
+          <b>03 &mdash; Submit</b>
+          <p>
+            Open a pull request with your output as a JSON file. The Submit
+            tab builds that file for you.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="leaderboard">
+      <div id="leaderboardList">
+        <div class="section-header">
+          <h2>Leaderboard</h2>
+
+          <p>
+            Published logger results. Open a row to inspect every individual
+            check, its failure reason and the metrics it reported.
+          </p>
+        </div>
+
+        <div class="leaderboard">
+          <div class="leaderboard-row leaderboard-header">
+            <span>Rank</span>
+            <span>Logger</span>
+            <span class="row-tests">Pass / Fail / Skip</span>
+            <span class="row-score">Score</span>
+          </div>
+
+          <div id="leaderboardRows">
+            <div class="empty-state">Loading results&hellip;</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="loggerStatistics" hidden>
+        <button class="back-button" id="backButton" type="button">
+          &larr; Back to leaderboard
+        </button>
+
+        <div class="profile-header">
+          <div>
+            <h2 id="loggerName">Logger</h2>
+            <div class="profile-meta" id="loggerMeta"></div>
+          </div>
+
+          <div class="profile-score">
+            <span id="loggerScore">0</span><small>%</small>
+          </div>
+        </div>
+
+        <div class="score-bar">
+          <span id="scoreBar" style="width: 0%"></span>
+        </div>
+
+        <div class="stats-summary">
+          <div class="summary-item passed">
+            <span>Passed</span>
+            <strong id="passedCount">0</strong>
+          </div>
+
+          <div class="summary-item failed">
+            <span>Failed</span>
+            <strong id="failedCount">0</strong>
+          </div>
+
+          <div class="summary-item skipped">
+            <span>Skipped</span>
+            <strong id="skippedCount">0</strong>
+          </div>
+
+          <div class="summary-item">
+            <span>Total checks</span>
+            <strong id="totalCount">0</strong>
+          </div>
+        </div>
+
+        <div class="explorer">
+          <div class="explorer-toolbar">
+            <div class="filter-group" id="filterGroup">
+              <button class="filter-button active" data-filter="all" type="button">
+                All
+              </button>
+
+              <button class="filter-button" data-filter="failed" type="button">
+                Failed
+              </button>
+
+              <button class="filter-button" data-filter="skipped" type="button">
+                Skipped
+              </button>
+
+              <button class="filter-button" data-filter="passed" type="button">
+                Passed
+              </button>
+            </div>
+
+            <input
+              class="search-input"
+              id="searchInput"
+              type="search"
+              placeholder="Search checks, for example: Instance, buffer, Executor"
+              autocomplete="off"
+            >
+          </div>
+
+          <ul class="test-list" id="testList"></ul>
+
+          <div class="explorer-footer">
+            <span id="listSummary">0 checks</span>
+          </div>
+        </div>
+
+        <div class="metrics-block" id="metricsBlock">
+          <h3>Reported metrics</h3>
+          <div class="metrics-grid" id="metricsGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="script">
+      <div class="section-header">
+        <h2>Script</h2>
+
+        <p>
+          Copy the script and run it in your environment logger. When it
+          finishes, keep the whole console output.
+        </p>
+      </div>
+
+      <div class="script-box">
+        <div class="script-toolbar">
+          <span class="script-name" id="scriptName">Log-Unc-V1.lua</span>
+
+          <div class="script-actions">
+            <button class="copy-button" id="copyLoaderButton" type="button">
+              Copy loadstring
+            </button>
+
+            <button class="copy-button" id="copyButton" type="button">
+              Copy source
+            </button>
+          </div>
+        </div>
+
+        <pre><code id="scriptCode">Loading script&hellip;</code></pre>
+      </div>
+
+      <p class="note">
+        <b>Loader:</b> if your logger supports <code>loadstring</code> and
+        <code>HttpGet</code>, run the script straight from this host instead of
+        pasting the source. Use <b>Copy loadstring</b>.
+      </p>
+    </section>
+
+    <section class="panel" id="submit">
+      <div class="section-header">
+        <h2>Submit a result</h2>
+
+        <p>
+          Results live in the repository as one JSON file per logger. Fill this
+          in, download the file, and open a pull request that adds it to
+          <code>site/loggers/</code>. No account or API key is needed.
+        </p>
+      </div>
+
+      <div class="submit-grid">
+        <label class="field">
+          <span>Logger name</span>
+          <input id="submitName" type="text" placeholder="For example: NyxLogger">
+        </label>
+
+        <label class="field">
+          <span>Author</span>
+          <input id="submitAuthor" type="text" placeholder="Your handle, optional">
+        </label>
+
+        <label class="field wide">
+          <span>Link</span>
+          <input id="submitUrl" type="url" placeholder="Repository or download page, optional">
+        </label>
+
+        <label class="field wide">
+          <span>Console output</span>
+          <textarea
+            id="submitOutput"
+            spellcheck="false"
+            placeholder="16:53:30 -- [PASS] game is DataModel&#10;16:53:30 -- [PASS] game parent is nil&#10;..."
+          ></textarea>
+        </label>
+      </div>
+
+      <div class="submit-actions">
+        <button class="primary-button" id="downloadButton" type="button">
+          Download JSON
+        </button>
+
+        <button class="secondary-button" id="copyJsonButton" type="button">
+          Copy JSON
+        </button>
+
+        <span class="status" id="submitStatus">Paste your output to preview it.</span>
+      </div>
+
+      <div class="preview" id="submitPreview" hidden>
+        <h3>Parsed preview</h3>
+
+        <div class="preview-grid" id="previewGrid"></div>
+        <div class="warnings" id="previewWarnings" hidden></div>
+        <div class="preview-path" id="previewPath"></div>
+      </div>
+
+      <div class="note">
+        <b>How it works:</b> every file in <code>site/loggers/</code> is parsed
+        at build time, so a merged pull request publishes the result
+        automatically. The build rejects malformed files, duplicate names and
+        outputs with no recognisable checks. Identifying metrics such as
+        <code>UserId</code>, <code>DisplayName</code> and <code>ClientId</code>
+        are stripped before anything is published.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Log-Unc with love by YuoTeAn
+  </footer>
+
+  <script src="/app.js" type="module"></script>
+  <script src="/submit.js" type="module"></script>
+</body>
+</html>

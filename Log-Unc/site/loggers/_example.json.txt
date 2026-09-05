@@ -1,0 +1,7 @@
+{
+  "name": "Example Logger",
+  "author": "your-handle",
+  "url": "https://github.com/your/logger",
+  "submittedAt": "2026-01-01",
+  "output": "12:00:00 -- [PASS] game is DataModel\n12:00:00 -- [PASS] game parent is nil\n12:00:01 -- Score: 100.00%\n12:00:01 -- Environment: ENV\n12:00:01 -- Passed: 2\n12:00:01 -- Failed: 0\n12:00:01 -- Skipped: 0\n12:00:01 -- METRICS\n12:00:01 -- Executor: ExampleExecutor"
+}
