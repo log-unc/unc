@@ -1,0 +1,6 @@
+{
+  "name": "Log-Unc-V1.lua",
+  "file": "script/Log-Unc-V1.lua",
+  "raw": "https://raw.githubusercontent.com/YuoTeAn/Log-Unc/main/script/Log-Unc-V1.lua",
+  "loadstring": "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/YuoTeAn/Log-Unc/main/script/Log-Unc-V1.lua\"))()"
+}
